@@ -1,0 +1,36 @@
+<div id="heat-explore">
+  <h2>Explore a neighborhood tile</h2>
+  <div class="viz-controls">
+    <label class="form-label">Surface <select class="form-select" id="explore-material"><option value="28">Asphalt</option><option value="18">Concrete</option><option value="7">Grass</option></select></label>
+    <label class="form-check"><input class="form-check-input" id="explore-shade" type="checkbox"><span class="form-check-label">Tree shade</span></label>
+  </div>
+  <svg viewBox="0 0 360 150" role="img" aria-label="Schematic surface tile with temperature estimate" style="width:100%;max-width:480px">
+    <path id="explore-tile" d="M180 20 L310 70 L180 120 L50 70 Z" fill="var(--viz-series-1)"/>
+    <text id="explore-value" x="180" y="75" text-anchor="middle" fill="var(--foreground)">60°C</text>
+  </svg>
+  <div id="explore-detail" aria-live="polite">Educational surface estimate · sunny summer · 32°C air</div>
+  <script>
+    (() => {
+      const root = document.getElementById('heat-explore');
+      const surface = root.querySelector('#explore-material');
+      const shade = root.querySelector('#explore-shade');
+      function render() {
+        const value = 32 + Number(surface.value) * (shade.checked ? 0.35 : 1);
+        root.querySelector('#explore-value').textContent = value.toFixed(1) + '°C';
+        root.querySelector('#explore-tile').style.opacity = shade.checked ? '0.5' : '1';
+      }
+      const state = window.openai?.widgetState?.modelContent;
+      if (state?.surface) surface.value = state.surface;
+      shade.checked = Boolean(state?.shade);
+      [surface, shade].forEach(input => input.addEventListener('change', () => {
+        render();
+        window.openai?.setWidgetState({modelContent: {surface: surface.value, shade: shade.checked}})?.catch(() => {});
+      }));
+      window.addEventListener('openai:set_globals', event => {
+        const saved = event.detail?.globals?.widgetState?.modelContent;
+        if (saved) { surface.value = saved.surface || '28'; shade.checked = Boolean(saved.shade); render(); }
+      });
+      render();
+    })();
+  </script>
+</div>

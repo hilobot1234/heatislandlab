@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Build a neighborhood and explore how surfaces, shade, and trees affect educational estimates of surface temperature.">
+  <title>Heat Island Lab</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="masthead"><a href="#" class="brand">HI<span class="brand-dot">●</span> <span>HEAT ISLAND LAB</span></a><span class="tag">A neighborhood experiment</span></header>
+  <main>
+    <section class="intro">
+      <div><p class="eyebrow">ENVIRONMENTAL SCIENCE / INTERACTIVE LAB</p><h1>Small changes.<br><span>A cooler neighborhood.</span></h1><p>Build, plant, and compare. See how materials and shade change the heat of the surfaces around you.</p></div>
+      <div class="scenario"><strong>☀ Sunny summer afternoon</strong><span>32°C air · sun from the west · 45° elevation</span><small>Fixed conditions for a fair experiment</small></div>
+    </section>
+    <div class="lab">
+      <aside class="editor" aria-label="Neighborhood tools">
+        <p class="eyebrow">01 / MAKE A CHANGE</p><h2>Your toolkit</h2>
+        <p class="hint">Choose a tool, then click a tile. One tree or building fits on each tile.</p>
+        <div class="tools" role="group" aria-label="Editing tool">
+          <button data-tool="inspect" aria-pressed="true">⌖ Inspect</button><button data-tool="tree" aria-pressed="false">♣ Plant tree</button>
+          <button data-tool="building" aria-pressed="false">▥ Building</button><button data-tool="ground" aria-pressed="false">▦ Surface</button>
+          <button data-tool="remove" aria-pressed="false">× Remove</button>
+        </div>
+        <label for="height">Building height</label><select id="height"><option value="low">Low · 6 m</option><option value="medium" selected>Medium · 12 m</option><option value="tall">Tall · 24 m</option></select>
+        <label for="material">Building material (roof)</label><select id="material"><option value="dark">Dark roof</option><option value="brick" selected>Brick / tile roof</option><option value="reflective">Reflective roof</option></select>
+        <label for="ground">Ground surface</label><select id="ground"><option value="asphalt">Asphalt</option><option value="concrete">Concrete</option><option value="grass">Grass</option><option value="pavers">Light pavers</option></select>
+        <p class="hint">Inspect a building to edit its height or roof with these controls. Ground changes apply to the selected tile and stay beneath objects.</p>
+        <div class="actions"><button id="example">Example neighborhood</button><button id="reset">Reset to empty</button></div>
+      </aside>
+      <section class="map-panel" aria-labelledby="map-title">
+        <div class="map-heading"><div><p class="eyebrow">02 / SEE THE EFFECT</p><h2 id="map-title">Your neighborhood</h2></div><label class="toggle"><input type="checkbox" id="heatmap" checked> Heatmap</label></div>
+        <div id="viewport"><canvas id="scene" aria-label="Interactive 3D neighborhood. Use the numbered tile buttons below for keyboard editing.">Use the tile buttons below to edit the neighborhood.</canvas><span class="sun-label">☀ WEST → EAST</span><span id="renderer-status" class="renderer-status">Loading 3D view…</span></div>
+        <div class="map-footer"><span id="tool-hint">Click any tile to investigate its temperature.</span><span>8 × 8 tiles · each 10 m × 10 m</span></div>
+        <div class="legend"><strong>Estimated surface temperature</strong><div class="legend-bar"></div><div class="legend-labels"><span>32°C · cooler</span><span>46°C</span><span>60°C · hotter</span></div></div>
+        <div class="notice">Educational estimates of <strong>surface temperature</strong>, not air temperature or a weather forecast.</div>
+      </section>
+      <aside class="results" aria-label="Selected location">
+        <p class="eyebrow">03 / INVESTIGATE</p><h2 id="location">Tile A1</h2>
+        <div id="result" aria-live="polite" aria-atomic="true"></div>
+        <div class="challenge"><strong>Try a fair comparison</strong><p>Inspect a hot asphalt tile. Plant a tree just west of it. What changes? Then compare a low building with a tall one.</p></div>
+      </aside>
+    </div>
+    <section class="under-lab">
+      <div class="how"><p class="eyebrow">THE SCIENCE, SIMPLIFIED</p><h2>How it works</h2><p><strong>Materials heat differently.</strong> Dark surfaces absorb more sunlight. Reflective roofs and light surfaces heat less in this model.</p><p><strong>Shade blocks sunlight.</strong> Buildings and trees shade surfaces to their east. Taller buildings cast longer shadows; their roofs can still be hot.</p><p><strong>Trees help nearby surfaces.</strong> Leaves release water, which can cool their surroundings. Our simplified effect fades with distance and is capped so overlapping trees cannot cool without limit.</p><p>These changes are recalculated immediately. Real temperatures also depend on wind, moisture, time, and local conditions.</p><a href="MODEL.md">Read the model, assumptions, and sources ↗</a><details class="sources"><summary>Science sources &amp; model limits</summary><p>EPA explains <a href="https://www.epa.gov/heatislands/what-are-heat-islands">urban heat islands</a>, <a href="https://www.epa.gov/heatislands/benefits-trees-and-vegetation">tree shade and water release</a>, and <a href="https://www.epa.gov/heatislands/using-cool-roofs-reduce-heat-islands">reflective roofs</a>. These sources support the ideas, not our exact temperature numbers.</p><p>All numerical parameters are illustrative. We hold the weather fixed, simplify material properties, and leave out wind, changing moisture, nighttime heat, and energy use. Displayed decimals help compare changes; they do not mean measured accuracy.</p></details></div>
+      <div class="tile-panel"><div class="tile-heading"><h2>Tile explorer</h2><span>North ↑ · East →</span></div><p class="hint">A top-down view of the same neighborhood. Click or use Tab and Enter to inspect or edit. Numbers are surface °C; B = building, T = tree.</p><div id="tile-grid" class="tile-grid" role="group" aria-label="Neighborhood tiles"></div></div>
+    </section>
+  </main>
+  <footer>HEAT ISLAND LAB <span>Observe. Change one thing. Compare.</span></footer>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

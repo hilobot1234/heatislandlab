@@ -1,0 +1,13 @@
+{
+  "name": "heat-island-lab",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "dev": "python3 -m http.server 5173 --bind 127.0.0.1 --directory src",
+    "preview": "python3 -m http.server 5173 --bind 127.0.0.1 --directory dist"
+  }
+}
