@@ -35,7 +35,7 @@ Three.js 0.160.1 loads from jsDelivr at runtime. If it or WebGL is unavailable, 
 
 Run `npm run build`, then upload the **contents** of `dist/` to any static host. The entry file is `index.html`; serve `.js` as JavaScript and use HTTPS. No server functions or environment variables are required. Relative asset links support subdirectory hosting. For a CSP, allow the pinned `https://cdn.jsdelivr.net` module or rely on the local fallback.
 
-The Sites configuration is `.openai/hosting.json`. Publication and public access require a separate user approval. The build is ready for upload; preparing it does not make it public.
+Netlify settings live in `netlify.toml`: it runs `npm run build` with Node 20 and publishes `dist/`. Connected to GitHub, Netlify redeploys on every push to `main`.
 
 ## Verification limits
 
