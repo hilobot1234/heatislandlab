@@ -27,9 +27,9 @@ Use two-space indentation, ES modules, descriptive camelCase names, and small pu
 
 ## Controls
 
-Select a tool and click a 3D tile or its numbered tile-explorer button. Objects replace other objects on that tile. Inspect selects without editing. Changing height or roof edits a selected building; changing ground edits the selected tile even beneath an object. Remove deletes only the object. Reset restores empty asphalt; Example restores the initial mixed neighborhood. Heatmap toggles temperature colors in the 3D view. The labeled color legend remains fixed for fair comparisons. Tile-explorer numbers always show temperatures, even when the 3D heatmap is off.
+Pick a tool and click a 3D tile or its tile-explorer button. Objects replace other objects on that tile. Measure temperature selects without editing. Height and roof menus appear only with the Building tool, and the ground menu only with Surface. Changing height or roof edits a selected building; changing ground edits the selected tile even beneath an object. Remove deletes only the object. Start over restores empty asphalt; Load example restores the initial mixed neighborhood. Heat colors toggles temperature colors in the 3D view. The labeled color legend remains fixed for fair comparisons. The readout's heat budget shows how air temperature, material heating, shade, and nearby trees add up to each tile's estimate. Tile-explorer numbers always show temperatures, even when 3D heat colors are off.
 
-Three.js 0.160.1 loads from jsDelivr at runtime. If it or WebGL is unavailable, an offline-capable canvas renderer draws an isometric 3D projection with the same controls and model. No accounts, API keys, analytics, or backend are used. Edits stay in memory and restart on page reload.
+Three.js 0.160.1 loads from jsDelivr at runtime. If it or WebGL is unavailable, an offline-capable canvas renderer draws an isometric 3D projection with the same controls and model. Fonts (Bricolage Grotesque, Atkinson Hyperlegible, JetBrains Mono) load from Google Fonts; system fonts take over offline. No accounts, API keys, analytics, or backend are used. Edits stay in memory and restart on page reload.
 
 ## Host
 

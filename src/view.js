@@ -108,9 +108,23 @@ function createThree(THREE, canvas, onPick) {
     });
     const width = canvas.clientWidth, height = canvas.clientHeight;
     renderer.setSize(width,height,false);
-    const half = Math.max(6.3, 5.5 * height / width);
-    camera.left = -half; camera.right = half; camera.top = half*height/width; camera.bottom = -camera.top; camera.updateProjectionMatrix();
+    fitCamera(width / height);
     renderer.render(scene,camera);
+  }
+  // Frame the board with the tallest possible building so zoom stays fixed while editing.
+  const tallest = Math.max(...Object.values(HEIGHTS)) / 10, edge = SIZE / 2;
+  function fitCamera(aspect) {
+    camera.updateMatrixWorld();
+    const bounds = { left: Infinity, right: -Infinity, bottom: Infinity, top: -Infinity };
+    for (const x of [-edge, edge]) for (const y of [0, tallest]) for (const z of [-edge, edge]) {
+      const p = new THREE.Vector3(x, y, z).applyMatrix4(camera.matrixWorldInverse);
+      bounds.left = Math.min(bounds.left, p.x); bounds.right = Math.max(bounds.right, p.x);
+      bounds.bottom = Math.min(bounds.bottom, p.y); bounds.top = Math.max(bounds.top, p.y);
+    }
+    const margin = 0.4, centerX = (bounds.left + bounds.right) / 2, centerY = (bounds.bottom + bounds.top) / 2;
+    const halfHeight = Math.max((bounds.top - bounds.bottom) / 2, (bounds.right - bounds.left) / 2 / aspect) + margin;
+    camera.left = centerX - halfHeight * aspect; camera.right = centerX + halfHeight * aspect;
+    camera.top = centerY + halfHeight; camera.bottom = centerY - halfHeight; camera.updateProjectionMatrix();
   }
   canvas.addEventListener('click', event => {
     const rect = canvas.getBoundingClientRect();
