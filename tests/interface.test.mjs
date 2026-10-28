@@ -60,6 +60,28 @@ test('placement, selected building editing and removal update the UI',async()=>{
   app.tool('remove'); app.tile(24); assert.equal(app.temperature(),60);
   app.tool('inspect'); app.tile(26); assert.equal(app.temperature(),60);
 });
+test('building tool selects an existing building instead of overwriting it, and tool switches sync menus',async()=>{
+  const app=await startApp(); app.el('reset').emit('click');
+  app.tool('building'); app.choose('height','tall'); app.choose('material','dark'); app.tile(24);
+  app.tool('inspect'); app.tile(25); app.tool('building'); app.choose('height','low');
+  app.tile(24); assert.match(app.el('result').innerHTML,/24 m building/);
+  assert.equal(app.el('height').value,'tall'); assert.equal(app.el('material').value,'dark');
+  app.tile(25); assert.match(app.el('result').innerHTML,/24 m building/);
+  app.tool('inspect'); app.tile(24); app.el('height').value='low'; app.tool('building');
+  assert.equal(app.el('height').value,'tall');
+});
+test('tile explorer numbers match the readout on every example tile',async()=>{
+  const app=await startApp(); app.el('example').emit('click');
+  for(let index=0;index<64;index++){
+    app.tile(index);
+    assert.equal(Number(app.el('tile-grid').children[index].textContent.replace(/^[TB] /,'')),Math.round(app.temperature()),`tile ${index}`);
+  }
+});
+test('a tree tile credits its own tree in the heat budget',async()=>{
+  const app=await startApp(); app.el('reset').emit('click');
+  app.tool('tree'); app.tile(25); assert.match(app.el('result').innerHTML,/This tree and nearby trees/);
+  app.tool('inspect'); app.tile(26); assert.match(app.el('result').innerHTML,/<dt>Nearby trees<\/dt>/);
+});
 test('tree planting, ground change, reset and example update results and map',async()=>{
   const app=await startApp(); app.el('reset').emit('click');
   app.tool('tree'); app.tile(25);

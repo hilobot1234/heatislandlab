@@ -55,6 +55,19 @@ test('overlapping cooling is capped and shadow fraction stays bounded', () => {
     assert.ok(result.temperature >= AIR && result.temperature <= 60);
   }
 });
+test('heat budget terms sum to the displayed temperature, even at the air-temperature floor', () => {
+  let cells = editCell(blankNeighborhood(),at(3,3),'ground',{ground:'grass'});
+  cells = editCell(cells,at(2,3),'building',{height:'tall',material:'dark'});
+  for (const [x,z] of [[3,2],[3,4],[4,3]]) cells = editCell(cells,at(x,z),'tree');
+  const floored = estimate(cells,at(3,3));
+  assert.equal(floored.temperature,AIR);
+  assert.ok(floored.cooling < 4);
+  for (const result of [...temperatures(cells),...temperatures(exampleNeighborhood())]) {
+    const total = AIR + result.excess - result.shadeReduction - result.cooling;
+    assert.ok(Math.abs(total - result.temperature) < 1e-9);
+    assert.ok(result.cooling >= 0 && result.temperature >= AIR);
+  }
+});
 test('tree cooling fades with roof height', () => {
   const base = editCell(blankNeighborhood(),at(3,3),'tree');
   const low = editCell(base,at(3,4),'building',{height:'low',material:'dark'});

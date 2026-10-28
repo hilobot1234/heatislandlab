@@ -27,7 +27,7 @@ Use two-space indentation, ES modules, descriptive camelCase names, and small pu
 
 ## Controls
 
-Pick a tool and click a 3D tile or its tile-explorer button. Objects replace other objects on that tile. Measure temperature selects without editing. Height and roof menus appear only with the Building tool, and the ground menu only with Surface. Changing height or roof edits a selected building; changing ground edits the selected tile even beneath an object. Remove deletes only the object. Start over restores empty asphalt; Load example restores the initial mixed neighborhood. Heat colors toggles temperature colors in the 3D view. The labeled color legend remains fixed for fair comparisons. The readout's heat budget shows how air temperature, material heating, shade, and nearby trees add up to each tile's estimate. Tile-explorer numbers always show temperatures, even when 3D heat colors are off.
+Pick a tool and click a 3D tile or its tile-explorer button. Objects replace other objects on that tile, except that the Building tool selects an existing building instead of replacing it; change its height or roof from the menus. Measure temperature selects without editing. Height and roof menus appear only with the Building tool, and the ground menu only with Surface. Changing height or roof edits a selected building; changing ground edits the selected tile even beneath an object. Remove deletes only the object. Start over restores empty asphalt; Load example restores the initial mixed neighborhood. Heat colors toggles temperature colors in the 3D view. The labeled color legend remains fixed for fair comparisons. The readout's heat budget shows how air temperature, material heating, shade, and nearby trees add up to each tile's estimate. Tile-explorer numbers always show temperatures, even when 3D heat colors are off.
 
 Three.js 0.160.1 loads from jsDelivr at runtime. If it or WebGL is unavailable, an offline-capable canvas renderer draws an isometric 3D projection with the same controls and model. Fonts (Bricolage Grotesque, Atkinson Hyperlegible, JetBrains Mono) load from Google Fonts; system fonts take over offline. No accounts, API keys, analytics, or backend are used. Edits stay in memory and restart on page reload.
 
@@ -39,7 +39,7 @@ Netlify settings live in `netlify.toml`: it runs `npm run build` with Node 20 an
 
 ## Verification limits
 
-The 16 automated checks cover controlled model comparisons, the bundled application's actual control handlers, and offline canvas tile picking with DOM/canvas adapters. They do not replace visual browser testing or validate the Three.js/WebGL path. In this workspace local server binding was denied and native browser automation was interrupted, so visual desktop/mobile checks remain pending. The Skill Creator validator also lacked its PyYAML dependency; the skill's frontmatter and linked files were checked separately.
+The 20 automated checks cover controlled model comparisons, the bundled application's actual control handlers, and offline canvas tile picking with DOM/canvas adapters. They do not replace visual browser testing or validate the Three.js/WebGL path. In this workspace local server binding was denied and native browser automation was interrupted, so visual desktop/mobile checks remain pending. The Skill Creator validator also lacked its PyYAML dependency; the skill's frontmatter and linked files were checked separately.
 
 ## Science
 

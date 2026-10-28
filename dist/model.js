@@ -99,9 +99,11 @@ export function estimate(cells, index) {
     const distance = Math.hypot(x - ((i % SIZE) * 10 + 5), z - (Math.floor(i / SIZE) * 10 + 5));
     treeEffect += 2.5 * Math.max(0, 1 - distance / 25);
   });
-  const cooling = Math.min(4, treeEffect) * Math.max(0, 1 - y / 12);
   const shadeReduction = material.excess * 0.65 * shade;
-  const temperature = Math.max(AIR, AIR + material.excess - shadeReduction - cooling);
+  // Cooling removes only heat left after shade, so the budget terms always sum to the
+  // displayed temperature and the surface never drops below air temperature.
+  const cooling = Math.min(Math.min(4, treeEffect) * Math.max(0, 1 - y / 12), material.excess - shadeReduction);
+  const temperature = AIR + material.excess - shadeReduction - cooling;
   return { temperature, shade, cooling, shadeReduction, material: material.label, excess: material.excess, kind: building ? 'roof' : 'ground' };
 }
 
