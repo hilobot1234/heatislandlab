@@ -13,5 +13,7 @@ const html = (await readFile('src/index.html', 'utf8'))
   .replace('<link rel="stylesheet" href="style.css">', () => `<style>${css}</style>`)
   .replace('<script type="module" src="app.js"></script>', () => `<script type="module">${script}</script>`);
 await writeFile('dist/index.html', html);
-await writeFile('preview.html', html.replace('href="MODEL.md"', 'href="docs/MODEL.md"'));
+// preview.html opens from file://, which cannot import a sibling module, so it loads Three.js from the CDN.
+await writeFile('preview.html', html.replace('href="MODEL.md"', 'href="docs/MODEL.md"')
+  .replace("import('./vendor/three.module.min.js')", () => "import('https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.min.js')"));
 console.log('Static site ready in dist/');

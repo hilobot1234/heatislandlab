@@ -436,7 +436,7 @@ function createIsometric(canvas, onPick) {
     const hit = [...hits].reverse().find(hit => inside(hit.points)); if (hit) onPick(hit.index);
   });
   const observer = new ResizeObserver(() => state && draw(...state)); observer.observe(canvas.parentElement);
-  return { draw };
+  return { draw, stop: () => observer.disconnect() };
 }
 
 function createThree(THREE, canvas, onPick) {
@@ -509,19 +509,30 @@ function createThree(THREE, canvas, onPick) {
 }
 
 async function createView(canvas, onPick, onReady) {
-  // Pinned official Three.js release. The simulator also works without it.
+  // Pinned official Three.js 0.160.1, served with the site. The simulator also works without it.
+  const loading = import('https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.min.js');
   try {
     const THREE = await Promise.race([
-      import('https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js'),
+      loading,
       new Promise((_, reject) => setTimeout(() => reject(new Error('3D download timeout')), 4500)),
     ]);
     const view = createThree(THREE,canvas,onPick);
     onReady('Three.js 3D'); return view;
   } catch {
     // A failed WebGL construction may claim the original canvas context.
-    const replacement = canvas.cloneNode(true); canvas.replaceWith(replacement);
-    const view = createIsometric(replacement,onPick);
-    onReady('Isometric view · 3D fallback'); return view;
+    const fallbackCanvas = canvas.cloneNode(true); canvas.replaceWith(fallbackCanvas);
+    const fallback = createIsometric(fallbackCanvas,onPick);
+    let current = fallback, latest;
+    onReady('Isometric view · 3D fallback');
+    // On slow connections, keep downloading and switch to 3D once it arrives.
+    loading.then(THREE => {
+      const threeCanvas = fallbackCanvas.cloneNode(true); fallbackCanvas.replaceWith(threeCanvas);
+      try { current = createThree(THREE,threeCanvas,onPick); }
+      catch { threeCanvas.replaceWith(fallbackCanvas); return; }
+      fallback.stop(); onReady('Three.js 3D');
+      if (latest) current.draw(...latest);
+    }).catch(() => {});
+    return { draw: (...args) => { latest = args; current.draw(...args); } };
   }
 }
 
